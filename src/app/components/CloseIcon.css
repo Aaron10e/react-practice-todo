@@ -1,0 +1,11 @@
+.close-icon {
+  fill: black;
+  /* Default color for light theme */
+}
+
+@media (prefers-color-scheme: dark) {
+  .close-icon {
+    fill: white;
+    /* Color for dark theme */
+  }
+}

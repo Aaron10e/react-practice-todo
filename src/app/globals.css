@@ -95,6 +95,14 @@ body {
     rgb(var(--background-start-rgb));
 }
 
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 4px;
+  border-radius: 4px;
+}
+
 a {
   color: inherit;
   text-decoration: none;
