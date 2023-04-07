@@ -113,3 +113,18 @@ a {
     color-scheme: dark;
   }
 }
+
+.todoItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.cancel {
+  margin-right: 8px;
+}
+
+.itemButtons {
+  display: flex;
+  align-items: center;
+}

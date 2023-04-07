@@ -1,16 +1,18 @@
 import React, { useState, FC } from 'react';
 import generateID from '../api/generateID';
-import Image from 'next/image';
 import styles from '../page.module.css';
 import { TodoItem } from '../models/todo-item';
 import { useTodoStore } from '../store/TodoStore';
 import CloseIcon from './CloseIcon';
 
 export const TodoList: FC = () => {
-  const [goals, setGoals] = useState<TodoItem[]>([]);
   const [input, setInput] = useState('');
   const [shaking, setShaking] = useState(false);
   const { state, dispatch } = useTodoStore();
+  const [editingTodo, setEditingTodo] = useState<{ id: string | null; value: string }>({
+    id: null,
+    value: '',
+  });
 
   const handleAddGoal = (
     event:
@@ -27,16 +29,29 @@ export const TodoList: FC = () => {
       return;
     }
     if (event.type === 'click' || event.keyCode === 13) {
-      const newGoal = { description: input, id: generateID(), isDone: false };
-      setGoals([...goals, newGoal]);
+      const newTodo = { description: input, id: generateID(), isDone: false };
+      dispatch({ type: 'ADD_TODO', payload: newTodo });
       setInput('');
     }
   };
 
+  const handleUpdateTodo = (updatedTodo: TodoItem) => {
+    dispatch({ type: 'UPDATE_TODO', payload: updatedTodo });
+  };
+  
+  const handleEditTodo = (id: string, value: string) => {
+    setEditingTodo({ id, value });
+  };
+
+  const handleSaveEdit = (id: string, value: string) => {
+    if (value.trim()) {
+      dispatch({ type: 'UPDATE_TODO', payload: { id, description: value.trim() } });
+    }
+    setEditingTodo({ id: null, value: '' });
+  };
+
   const handleRemoveGoal = (id: any) => {
-    setGoals((currentGoals) => {
-      return currentGoals.filter((goal) => goal.id !== id);
-    });
+    dispatch({ type: 'DELETE_TODO', payload: id });
   };
 
   const handleInputChange = (event: {
@@ -62,19 +77,41 @@ export const TodoList: FC = () => {
           <div className={styles.card}>
             <span>reminders:</span>
             <hr></hr>
-            {goals.map((todo, index) => (
-              <div key={todo.id}>
-                <li>
-                  {todo.description}
-                  <div
-                    className={styles.cancel}
-                    onClick={() => handleRemoveGoal(todo.id)}
-                  >
-                  <CloseIcon />
-                  </div>
-                </li>
-              </div>
-            ))}
+              {state.todos.map((todo) => (
+                <div key={todo.id}>
+                  <li className={styles.todoItem}>
+                    {editingTodo.id === todo.id ? (
+                      <input
+                        type="text"
+                        value={editingTodo.value}
+                        onChange={(e) => setEditingTodo({ ...editingTodo, value: e.target.value })}
+                        onBlur={() => handleSaveEdit(todo.id, editingTodo.value)}
+                        onKeyUp={(e) => {
+                          if (e.key === 'Enter') {
+                            handleSaveEdit(todo.id, editingTodo.value);
+                          }
+                        }}
+                        autoFocus
+                      />
+                    ) : (
+                      <span onDoubleClick={() => handleEditTodo(todo.id, todo.description)}>
+                        {todo.description} {todo.isDone ? '✓' : ''}
+                      </span>
+                    )}
+                    <div className={styles.itemButtons}>
+                      <div
+                        className={styles.cancel}
+                        onClick={() => handleRemoveGoal(todo.id)}
+                      >
+                        <CloseIcon />
+                      </div>
+                      <button onClick={() => handleUpdateTodo({ ...todo, isDone: !todo.isDone })}>
+                        Toggle Status
+                      </button>
+                    </div>
+                  </li>
+                </div>
+              ))}
             <input
               id={shaking ? 'shake' : ''}
               value={input}
