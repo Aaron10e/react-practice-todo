@@ -4,6 +4,7 @@ import styles from '../page.module.css';
 import { TodoItem } from '../models/todo-item';
 import { useTodoStore } from '../store/TodoStore';
 import CloseIcon from './CloseIcon';
+import { FaRegCircle, FaRegCheckCircle } from 'react-icons/fa'
 
 export const TodoList: FC = () => {
   const [input, setInput] = useState('');
@@ -95,19 +96,24 @@ export const TodoList: FC = () => {
                       />
                     ) : (
                       <span onDoubleClick={() => handleEditTodo(todo.id, todo.description)}>
-                        {todo.description} {todo.isDone ? '✓' : ''}
+                        {todo.description}
                       </span>
                     )}
                     <div className={styles.itemButtons}>
+                      <button onClick={() => handleUpdateTodo({ ...todo, isDone: !todo.isDone })}>
+                        {todo.isDone ? (
+                          <FaRegCheckCircle />
+                        ) : (
+                          <FaRegCircle />
+                        )}
+                      </button>
                       <div
                         className={styles.cancel}
                         onClick={() => handleRemoveGoal(todo.id)}
+                        title="Remove goal"
                       >
                         <CloseIcon />
-                      </div>
-                      <button onClick={() => handleUpdateTodo({ ...todo, isDone: !todo.isDone })}>
-                        Toggle Status
-                      </button>
+                      </div>                      
                     </div>
                   </li>
                 </div>

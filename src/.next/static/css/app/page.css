@@ -21,7 +21,7 @@
   justify-content: space-between;
   align-items: initial;
   padding: 6rem;
-  min-height: 100vh;
+  min-height: 85vh;
 }
 
 .page_main__WunS6 p,
@@ -178,6 +178,21 @@
     rgba(var(--tile-end-rgb), 1)
   );
   background-clip: content-box;
+}
+
+.page_todoItem__PqfTU {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.page_cancel__MyZsT {
+  margin-left: 8px;
+}
+
+.page_itemButtons__Ea4xn {
+  display: flex;
+  align-items: center;
 }
 
 /* Enable hover only on non-touch devices */

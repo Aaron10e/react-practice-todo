@@ -114,17 +114,28 @@ a {
   }
 }
 
-.todoItem {
+/* FIX: Remove position: absolute to keep about icon at the bottom of the
+ * document */
+.about-link {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  justify-content: flex-end;
 }
 
-.cancel {
-  margin-right: 8px;
+/* FIX: Remove position: absolute to keep about icon at the bottom of the
+ * document */
+.about-link a {
+  color: #fff;
+  cursor: pointer;
 }
 
-.itemButtons {
-  display: flex;
-  align-items: center;
+.about-link a:hover {
+  color: #ff6a95;
+}
+
+.about h1 {
+  margin-bottom: 20px;
+}
+
+.about p {
+  margin: 10px 0;
 }
